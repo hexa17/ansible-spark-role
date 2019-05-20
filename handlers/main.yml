@@ -1,0 +1,26 @@
+- name: Restart Spark master
+  systemd:
+    name:  spark-master
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: (spark_roles is defined) and ("spark-master" in spark_roles)
+  listen: restart-spark
+
+- name: Restart Spark workers
+  systemd:
+    name:  spark-worker
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: (spark_roles is undefined) or ("spark-worker" in spark_roles)
+  listen: restart-spark
+
+- name: Restart Spark historyserver
+  systemd:
+    name:  spark-historyserver
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: (spark_roles is defined) and ("spark-historyserver" in spark_roles)
+  listen: restart-spark

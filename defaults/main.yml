@@ -1,0 +1,3 @@
+apache_mirror: https://dist.apache.org/repos/dist/release
+spark_version: 2.3.2
+spark_version_build: bin-hadoop2.7

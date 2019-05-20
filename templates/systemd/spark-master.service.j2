@@ -1,0 +1,16 @@
+[Unit]
+Description=Spark master
+After=network.target
+Requires=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=forking
+WorkingDirectory={{spark_home}}
+Environment=SPARK_HOME={{spark_home}}
+# Environment=SPARK_NO_DAEMONIZE=true
+ExecStart={{spark_home}}/sbin/start-master.sh
+
+[Install]
+WantedBy=multi-user.target

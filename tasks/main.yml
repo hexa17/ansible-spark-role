@@ -1,0 +1,73 @@
+---
+- name: Set fact 'conda_home'
+  set_fact:
+    spark_home: "{{spark_home | default('/opt/spark')}}"
+    hadoop_home: "{{hadoop_home | default('/opt/hadoop')}}"
+    conda_home: "{{conda_home | default('/opt/conda')}}"
+
+- name: Check if spark already installed
+  stat: 
+    path: "{{spark_home}}/bin/spark-submit"
+  register: bin_spark
+
+- name: Install spark
+  # when: not bin_spark.stat.exists
+  block:
+  - name: Ensure pre-required package installed
+    package:
+      name:  tar
+      state: present
+
+  - name: Download spark.tgz
+    get_url:
+      url:  "{{apache_mirror}}/spark/spark-{{spark_version}}/spark-{{spark_version}}-{{spark_version_build}}.tgz"
+      dest: "/opt/spark-{{spark_version}}-{{spark_version_build}}.tgz"
+    retries: 5
+    delay: 2
+
+  - name: Unarchive spark.tgz
+    unarchive:
+      src:  "/opt/spark-{{spark_version}}-{{spark_version_build}}.tgz"
+      dest: "/opt"
+      owner: root
+      group: root
+      remote_src: yes
+
+  - name: Create symbolic link 
+    file:
+     src: "/opt/spark-{{spark_version}}-{{spark_version_build}}"
+     dest: "{{spark_home}}"
+     state: link
+
+- name: Config spark
+  template:
+    src:  "{{item}}"
+    dest: "{{spark_home}}/conf/{{item | basename | regex_replace('.j2$', '')}}"
+    owner: root
+    group: root
+  with_fileglob:
+  - "templates/config/*.j2"
+  notify: restart-spark
+
+- name: Config systemd service
+  block:
+  - name: Config Spark master service
+    template:
+      src:  "templates/systemd/spark-master.service.j2"
+      dest: "/etc/systemd/system/spark-master.service"
+    when: (spark_roles is defined) and ("spark-master" in spark_roles)
+    notify: restart-spark
+
+  - name: Config Spark worker services
+    template:
+      src:  "templates/systemd/spark-worker.service.j2"
+      dest: "/etc/systemd/system/spark-worker.service"
+    when: (spark_roles is undefined) or ("spark-worker" in spark_roles)
+    notify: restart-spark
+
+  - name: Config Spark historyserver service
+    template:
+      src:  "templates/systemd/spark-historyserver.service.j2"
+      dest: "/etc/systemd/system/spark-historyserver.service"
+    when: (spark_roles is defined) and ("spark-historyserver" in spark_roles)
+    notify: restart-spark
