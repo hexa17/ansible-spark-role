@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: spark
   author: hexa17
   description: spark role
   company: TEKO
