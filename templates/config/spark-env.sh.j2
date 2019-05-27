@@ -70,16 +70,16 @@
 
 JAVA_HOME="$(readlink -f /usr/bin/java | sed "s:/bin/java::")"
 
-HADOOP_HOME="{{hadoop_home}}"
-HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
-YARN_CONF_DIR="${YARN_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
-HDFS_CONF_DIR="${HDFS_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
+#HADOOP_HOME="{{hadoop_home}}"
+#HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
+#YARN_CONF_DIR="${YARN_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
+#HDFS_CONF_DIR="${HDFS_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
 
-SPARK_DIST_CLASSPATH="$(${HADOOP_HOME}/bin/hadoop classpath)"
+#SPARK_DIST_CLASSPATH="$(${HADOOP_HOME}/bin/hadoop classpath)"
 PYSPARK_DRIVER_PYTHON="{{conda_home}}/bin/python"
 PYSPARK_PYTHON="{{conda_home}}/bin/python"
 
 SPARK_MASTER_HOST={{spark_master_domain}}
-# SPARK_MASTER_PORT=17077
-# SPARK_MASTER_WEBUI_PORT=18080
-# SPARK_WORKER_WEBUI_PORT=18080
+SPARK_MASTER_PORT=7077
+SPARK_MASTER_WEBUI_PORT=18080
+SPARK_WORKER_WEBUI_PORT=18080

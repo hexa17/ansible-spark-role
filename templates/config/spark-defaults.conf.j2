@@ -31,20 +31,20 @@ spark.submit.deployMode     client
 
 spark.driver.cores                      1
 spark.driver.memory                     2G
-spark.executor.cores                    2
-spark.executor.memory                   12G
+spark.executor.cores                    1
+spark.executor.memory                   2G
 spark.deploy.defaultCores               12
 #spark.executor.instances                4
 #spark.dynamicAllocation.enabled         true
 #spark.dynamicAllocation.minExecutors    1
-#spark.dynamicAllocation.maxExecutors    32
+#spark.dynamicAllocation.maxExecutors    8
 #spark.scheduler.mode                    FAIR
 #spark.shuffle.service.enabled           true
 
 spark.eventLog.enabled          true
 spark.eventLog.compress         true
-spark.eventLog.dir              {{hdfs_datanode}}/apps/spark/spark-events
-spark.history.fs.logDirectory   {{hdfs_datanode}}/apps/spark/spark-events
+spark.eventLog.dir              {{hdfs_namenode}}/apps/spark/spark-events
+spark.history.fs.logDirectory   {{hdfs_namenode}}/apps/spark/spark-events
 spark.ui.reverseProxy           true
 
 spark.pyspark.python            /opt/conda/bin/python

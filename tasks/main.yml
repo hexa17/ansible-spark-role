@@ -1,4 +1,6 @@
 ---
+- include: adduser.yml
+
 - name: Set fact 'conda_home'
   set_fact:
     spark_home: "{{spark_home | default('/opt/spark')}}"
@@ -29,14 +31,16 @@
     unarchive:
       src:  "/opt/spark-{{spark_version}}-{{spark_version_build}}.tgz"
       dest: "/opt"
-      owner: root
-      group: root
+      owner: spark
+      group: spark
       remote_src: yes
 
   - name: Create symbolic link 
     file:
      src: "/opt/spark-{{spark_version}}-{{spark_version_build}}"
      dest: "{{spark_home}}"
+     owner: spark
+     group: spark
      state: link
 
 - name: Config spark

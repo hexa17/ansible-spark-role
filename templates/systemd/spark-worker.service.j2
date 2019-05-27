@@ -4,8 +4,8 @@ After=network.target
 Requires=network-online.target
 
 [Service]
-User=root
-Group=root
+User=spark
+Group=spark
 Type=forking
 WorkingDirectory={{spark_home}}
 Environment=SPARK_HOME={{spark_home}}
